@@ -2,9 +2,12 @@
 // 封装所有对话应用相关端点
 // 文档: https://docs.dify.ai/zh-hans/guides/application-publishing/developing-with-apis
 
-// 通过 Vite 代理访问 Dify API，避免浏览器 CORS 限制
 // API Key 从环境变量读取（.env 文件，已被 .gitignore 忽略）
-const BASE_URL = import.meta.env.VITE_DIFY_BASE_URL || '/dify-api'
+// 生产环境直接请求 Dify API 完整 URL，开发环境走 Vite 代理
+const isDev = import.meta.env.DEV
+const BASE_URL = isDev
+  ? (import.meta.env.VITE_DIFY_BASE_URL || '/dify-api')
+  : (import.meta.env.VITE_DIFY_API_BASE || 'https://api.dify.ai/v1')
 const API_KEY = import.meta.env.VITE_DIFY_API_KEY
 
 // 默认用户标识（前端演示用，生产环境应使用真实用户体系）
